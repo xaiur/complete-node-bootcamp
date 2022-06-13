@@ -12,10 +12,22 @@ const fs = require('fs');
 
 // Non-Bloking, asynchronous way
 
-fs.readFile('./starter/txt/start.txt', 'utf8', (err, data1) => {
+fs.readFile('./starter/txt/startttt.txt', 'utf8', (err, data1) => {
+  if (err) return console.error('error! 💥');
   //baris ini pakai Backtick
   fs.readFile(`./starter/txt/${data1}.txt`, 'utf8', (err, data2) => {
-    console.log(data2);
+    fs.readFile(`./starter/txt/append.txt`, 'utf8', (err, data3) => {
+      console.log(data3);
+
+      fs.writeFile(
+        './starter/txt/final.txt',
+        `${data2}\n${data3}`,
+        'utf8',
+        (err) => {
+          console.log('Your file has been written successfully 😃');
+        }
+      );
+    });
   });
 });
-console.log('Will Read File!');
+console.log('Will Read File!💨');
