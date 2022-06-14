@@ -43,6 +43,19 @@ const server = http.createServer((req, res) => {
     res.end('This is the Overview!');
   } else if (pathName === '/product') {
     res.end('This is the Product!');
+  } else if (pathName === '/api') {
+    fs.readFile(
+      `${__dirname}/dev-data/data.json`, //fungsi dirname untuk bisa masuk ke file yang dituju
+      'utf-8',
+      (err, data) => {
+        const productData = JSON.parse(data);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        // console.log(productData);
+        res.end(data);
+      }
+    );
+
+    // res.end('API');
   } else {
     res.writeHead(404, {
       'Content-Type': 'text/html',
