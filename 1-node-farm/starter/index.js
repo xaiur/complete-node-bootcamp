@@ -47,7 +47,7 @@ const replaceTemplate = (temp, product) => {
   output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
   output = output.replace(/{%QUANTITY%}/g, product.quantity);
   output = output.replace(/{%PRICE%}/g, product.price);
-  output = output.replace(/{%ID%}/g, product.ID);
+  output = output.replace(/{%ID%}/g, product.id);
   output = output.replace(/{%DESCRIPTION%}/g, product.description);
 
   if (!product.organic)
@@ -72,31 +72,35 @@ const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
 const dataObj = JSON.parse(data);
 
 const server = http.createServer((req, res) => {
-  // console.log(req.url);
   const pathName = req.url;
 
   //--------------------------------------------OVERVIEW-PAGE------------------------------------------//
   if (pathName === '/' || pathName === '/overview') {
-    res.writeHead(200, { 'content-type': 'text/html' });
+    res.writeHead(200, { 'Content-type': 'text/html' });
     const cardHtml = dataObj
       .map((el) => replaceTemplate(tempCard, el))
       .join('');
-    const output = tempOverview.replace('{%PRODUCT_CARD%}', cardHtml);
+    const output = tempOverview.replace('{%PRODUCT_CARDS%}', cardHtml);
     res.end(output);
 
     //-------------------------------------------PRODUCT-PAGE------------------------------------------//
   } else if (pathName === '/product') {
-    res.end(tempProduct);
+    res.writeHead(200, {
+      'Content-type': 'text/html',
+    });
+    const product = dataObj[query.id];
+    const output = replaceTemplate(tempProduct, product);
+    res.end(output);
 
     //------------------------------------------------API----------------------------------------------//
   } else if (pathName === '/api') {
-    res.writeHead(200, { 'content-type': 'application/json' });
+    res.writeHead(200, { 'Content-type': 'application/json' });
     res.end(data);
 
     //---------------------------------------------NOT-FOUND-------------------------------------------//
   } else {
     res.writeHead(404, {
-      'Content-Type': 'text/html',
+      'Content-type': 'text/html',
       'my-own-header': 'hello-world',
     });
     res.end('<h1>Page not found!</h1>');
