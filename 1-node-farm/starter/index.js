@@ -1,6 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 const url = require('url');
+const replaceTemplate = require('./modules/replaceTemplate');
 
 //--------------------------------------------FILES-------------------------------------------------//
 
@@ -39,21 +40,6 @@ const url = require('url');
 
 //kodenya sync karena hanya dieksekusi sekali di awal, makan tidak masalah funsinya membloking karena top level code yang di jalankan sekali, penting untuk mengetahui kode mana yang hanya dijalankan sekali, dan kode mana yang di jalankan berulang.
 //fungsi dirname untuk bisa masuk ke file yang dituju
-
-const replaceTemplate = (temp, product) => {
-  let output = temp.replace(/{%PRODUCTNAME%}/g, product.productName);
-  output = output.replace(/{%IMAGE%}/g, product.image);
-  output = output.replace(/{%FROM%}/g, product.from);
-  output = output.replace(/{%NUTRIENTS%}/g, product.nutrients);
-  output = output.replace(/{%QUANTITY%}/g, product.quantity);
-  output = output.replace(/{%PRICE%}/g, product.price);
-  output = output.replace(/{%ID%}/g, product.id);
-  output = output.replace(/{%DESCRIPTION%}/g, product.description);
-
-  if (!product.organic)
-    output = output.replace(/{%NOT_ORGANIC%}/g, 'not-organic');
-  return output;
-};
 
 const tempOverview = fs.readFileSync(
   `${__dirname}/templates/template-overview.html`,
