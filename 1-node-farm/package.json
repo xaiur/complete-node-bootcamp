@@ -1,0 +1,17 @@
+{
+  "name": "node-farm",
+  "version": "0.0.1",
+  "description": "learning node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon starter/index.js"
+  },
+  "author": "Hermawan Rinnaldi",
+  "license": "ISC",
+  "dependencies": {
+    "slugify": "^1.3.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.11"
+  }
+}
