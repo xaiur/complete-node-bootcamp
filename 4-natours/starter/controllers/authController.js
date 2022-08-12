@@ -195,6 +195,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 3) If so, update the user's password
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
+
   await user.save();
   // User.findByIdAndUpdate will NOT work as intended!
 
