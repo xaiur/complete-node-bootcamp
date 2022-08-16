@@ -48,6 +48,7 @@ app.use(xss());
 // Prevent parameter pollution
 app.use(
   hpp({
+    // Urutkan/sort berdasarkan paling penting
     whitelist: [
       'duration',
       'ratingQuantity',
