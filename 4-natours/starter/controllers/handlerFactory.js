@@ -79,6 +79,9 @@ exports.getAll = (Model) =>
       .paginate();
     const doc = await features.query;
 
+    // mengetahui index query
+    // const doc = await features.query.explain();
+
     // SEND RESPONSE
     res.status(200).json({
       status: 'success',
