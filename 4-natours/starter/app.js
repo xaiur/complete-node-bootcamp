@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -10,9 +11,16 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
+const cookieParser = require('cookie-parser');
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 //------------------------------------MIDDLEWARE--------------------------------------//
 // 1) GLOBAL MIDDLEWARES
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 // Set security HTTP headers
 app.use(helmet());
 // Development looging
@@ -28,11 +36,9 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 // [tanpa url spesifik] app.use(limiter);
 // Body parser, reading data from body into req.body
-app.use(
-  express.json({
-    limit: '1000kb',
-  })
-);
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(cookieParser());
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
 // Data sanitization against XSS
@@ -51,15 +57,16 @@ app.use(
     ],
   })
 );
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
+
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(req.headers);
+  // console.log(req.cookies);
   next();
 });
+
 //------------------------------------ROUTES--------------------------------------//
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
